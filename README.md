@@ -1,16 +1,27 @@
-# weather_news_app
+# Weather and News Aggregator App
 
-A new Flutter project.
+## Overview
 
-## Getting Started
+The Weather and News Aggregator App fetches and displays weather information and news headlines based on the user's location. It filters news articles according to current weather conditions, providing a tailored news experience.
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+- **Weather Information**: Fetches current weather data, including temperature and conditions, and displays a five-day forecast.
+- **News Headlines**: Retrieves and displays the latest news headlines with brief descriptions and links to full articles.
+- **Weather-Based News Filtering**: Filters news based on weather conditions:
+  - Cold weather: Shows news related to general or depressing topics.
+  - Hot weather: Displays news related to fear or crime.
+  - Cool weather: Highlights positive news such as sports and achievements.
+- **Settings**: Allows users to choose temperature units (Celsius/Fahrenheit) and select preferred news categories.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Tech Stack
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Flutter**: Framework for building the app.
+- **Dart**: Programming language used for development.
+- **Riverpod**: State management solution.
+- **OpenWeatherMap API**: Provides weather data.
+- **NewsAPI**: Provides news headlines.
+- **SharedPreferences**: For persisting user preferences.
+
+## Project Structure
+
