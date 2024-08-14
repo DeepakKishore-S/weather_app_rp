@@ -6,7 +6,7 @@ class NewsService {
   final String apiUrl = 'https://newsapi.org/v2/top-headlines';
 
   Future<List<dynamic>> fetchNews(String category) async {
-    final response = await http.get(Uri.parse('$apiUrl?category=$category&apiKey=$apiKey'));
+    final response = await http.get(Uri.parse('$apiUrl?category=$category&apiKey=$apiKey&country=us'));
     if (response.statusCode == 200) {
       return json.decode(response.body)['articles'];
     } else {

@@ -10,7 +10,8 @@ class WeatherNewsRepository {
   WeatherNewsRepository(this._weatherService, this._newsService);
 
   Future<Map<String, dynamic>> getWeatherData(String location) async {
-    return await _weatherService.fetchWeather(location);
+    return await _weatherService.fetchWeather(location,);
+    // return await _weatherService.fetchWeather(location, "metric");
   }
 
   Future<List<dynamic>> getNewsData(String category) async {
