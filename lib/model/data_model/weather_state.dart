@@ -1,32 +1,28 @@
 import 'package:weather_news_app/model/data_model/weather/weather_data.dart';
 
-class WeatherNewsState {
+class WeatherState {
   final bool isLoading;
   final WeatherData? weatherData;
-  final List<dynamic>? newsData;
   final String? errorMessage;
 
-  WeatherNewsState({
+  WeatherState({
     required this.isLoading,
     this.weatherData,
-    this.newsData,
     this.errorMessage,
   });
 
-  factory WeatherNewsState.initial() {
-    return WeatherNewsState(isLoading: false);
+  factory WeatherState.initial() {
+    return WeatherState(isLoading: false);
   }
 
-  WeatherNewsState copyWith({
+  WeatherState copyWith({
     bool? isLoading,
     WeatherData? weatherData,
-    List<dynamic>? newsData,
     String? errorMessage,
   }) {
-    return WeatherNewsState(
+    return WeatherState(
       isLoading: isLoading ?? this.isLoading,
       weatherData: weatherData ?? this.weatherData,
-      newsData: newsData ?? this.newsData,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
