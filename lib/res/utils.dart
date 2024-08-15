@@ -68,4 +68,6 @@ class AppUtils {
         );
     }
   }
+
+  static String weatherUrl(String iconData)=> "https://openweathermap.org/img/wn/${iconData}@2x.png";
 }

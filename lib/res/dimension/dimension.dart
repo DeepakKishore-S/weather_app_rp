@@ -10,6 +10,8 @@ abstract class Dimensions {
 
   double get bigText;
 
+  double get bigTitleText;
+
 
   //border radius
   double get imageBorderRadius;
@@ -22,6 +24,8 @@ abstract class Dimensions {
   double get iconSmallSize;
 
   double get iconMediumSize;
+
+  double get iconLargeSize;
 
   double get buttonHeight;
 }

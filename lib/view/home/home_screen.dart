@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'package:weather_news_app/view/home/widgets/app_bar_widget.dart';
 import 'package:weather_news_app/view/home/widgets/news_body_widget.dart';
 import 'package:weather_news_app/view/home/widgets/weather_info_widget.dart';
@@ -50,26 +51,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              children: [
-                // Display loading spinner, error message, or weather info
-                if (weatherState.isLoading)
-                  const CircularProgressIndicator()
-                else if (weatherState.errorMessage != null)
-                  _buildErrorWidget(weatherState.errorMessage!)
-                else if (weatherState.weatherData != null &&
-                    newsState.newsData != null)
-                  WeatherInfoWidget(
-                    weatherState: weatherState,
-                    isCollapsed: _isCollapsed,
-                  ),
-                NewsBodyWidget(newsState: newsState),
-              ],
+          if (weatherState.isLoading || newsState.isLoading)
+            Center(
+                child: Lottie.asset(
+              "assets/lottie/loader.json",
+              height: 100,
+              errorBuilder: (context, error, stackTrace) =>
+                  const CircularProgressIndicator(),
+            ))
+          else ...[
+            SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  // Display loading spinner, error message, or weather info
+                  if (weatherState.isLoading)
+                    const SizedBox.shrink()
+                  else if (weatherState.errorMessage != null)
+                    _buildErrorWidget(weatherState.errorMessage!)
+                  else if (weatherState.weatherData != null &&
+                      newsState.newsData != null)
+                    WeatherInfoWidget(
+                      weatherState: weatherState,
+                      isCollapsed: _isCollapsed,
+                    ),
+                  NewsBodyWidget(newsState: newsState),
+                ],
+              ),
             ),
-          ),
-          AppBarWidget(isCollapsed: _isCollapsed),
+            AppBarWidget(isCollapsed: _isCollapsed),
+          ]
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -93,6 +104,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Future<void> fetchWeatherAndNews(WidgetRef ref,
       {required String lat, required String lon, required String units}) async {
+    setState(() {
+      _isCollapsed = false;
+    });
     try {
       // Fetch weather data
       final weatherViewModel = ref.read(weatherProvider.notifier);

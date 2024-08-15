@@ -14,9 +14,7 @@ class NewsBodyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (newsState.isLoading)
-          const CircularProgressIndicator()
-        else if (newsState.errorMessage != null)
+        if (newsState.errorMessage != null)
           _buildErrorWidget(newsState.errorMessage!)
         else if (newsState.newsData != null)
           ListView.builder(

@@ -8,6 +8,9 @@ class AppDimension extends Dimensions {
   double get bigText => 22;
 
   @override
+  double get bigTitleText => 60;
+
+  @override
   double get defaultText => 18;
 
   @override
@@ -33,6 +36,9 @@ class AppDimension extends Dimensions {
 
   @override
   double get iconMediumSize => 40;
+
+  @override
+  double get iconLargeSize => 40;
 
   @override
   double get buttonHeight => 50;
