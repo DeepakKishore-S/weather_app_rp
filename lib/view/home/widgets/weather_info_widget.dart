@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_news_app/model/data_model/weather/weather_data.dart';
 import 'package:weather_news_app/model/data_model/weather_state.dart';
 import 'package:weather_news_app/res/AppContextExtension.dart';
 import 'package:weather_news_app/res/utils.dart';
@@ -19,8 +20,9 @@ class WeatherInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final weatherData = weatherState.weatherData!.list[0];
     return Container(
-      height: 300,
+      height: context.resources.screenHeight * 0.6,
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
         gradient: AppUtils.getWeatherGradient(
           weatherDescription: weatherData.weather[0].main,
           weatherMain: weatherData.weather[0].description,
@@ -32,7 +34,7 @@ class WeatherInfoWidget extends StatelessWidget {
               : SizedBox(
                   width: double.infinity,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       WeatherNetworkImageWidget(
                         imageUrl:
@@ -41,7 +43,7 @@ class WeatherInfoWidget extends StatelessWidget {
                       Text(
                         weatherState.weatherData!.city.name,
                         style: GoogleFonts.roboto(
-                          fontSize: context.resources.dimension.smallText,
+                          fontSize: context.resources.dimension.mediumText,
                           color: Colors.white,
                         ),
                       ),
@@ -63,7 +65,7 @@ class WeatherInfoWidget extends StatelessWidget {
                       Text(
                         weatherData.weather[0].main,
                         style: GoogleFonts.roboto(
-                          fontSize: context.resources.dimension.smallText,
+                          fontSize: context.resources.dimension.mediumText,
                           fontWeight: FontWeight.w300,
                           color: Colors.white,
                           shadows: [
@@ -78,7 +80,7 @@ class WeatherInfoWidget extends StatelessWidget {
                       Text(
                         "Max:${weatherData.main.temp_max.ceil()}° Min:${weatherState.weatherData!.list[0].main.temp_min.ceil()}°",
                         style: GoogleFonts.roboto(
-                          fontSize: context.resources.dimension.verySmallText,
+                          fontSize: context.resources.dimension.smallText,
                           fontWeight: FontWeight.w300,
                           color: Colors.white,
                           shadows: [
@@ -91,6 +93,59 @@ class WeatherInfoWidget extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      SizedBox(
+                        height: 110,
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) => const SizedBox(
+                            width: 10,
+                          ),
+                          shrinkWrap: true,
+                          itemCount: 5,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final List<WeatherInfo> weatherDatum =
+                                AppUtils.getUniqueEntriesByDate(
+                                    weatherState.weatherData!.list);
+                            final WeatherInfo data = weatherDatum[index];
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white30,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              height: 130,
+                              width: 60,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${data.main.temp.ceil()}°",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: context
+                                          .resources.dimension.verySmallText,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  WeatherNetworkImageWidget(
+                                    imageUrl: AppUtils.weatherUrl(
+                                        data.weather[0].icon),
+                                  ),
+                                  Text(
+                                      index == 0
+                                          ? "Today"
+                                          : AppUtils.getDayAbbreviation(
+                                              data.dt_txt),
+                                      style: GoogleFonts.roboto(
+                                        fontSize: context
+                                            .resources.dimension.verySmallText,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ))
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      )
                     ],
                   ),
                 )),

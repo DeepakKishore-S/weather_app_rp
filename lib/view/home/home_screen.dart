@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:weather_news_app/provider/location_provider.dart';
+import 'package:weather_news_app/res/AppContextExtension.dart';
 import 'package:weather_news_app/view/home/widgets/app_bar_widget.dart';
 import 'package:weather_news_app/view/home/widgets/news_body_widget.dart';
 import 'package:weather_news_app/view/home/widgets/weather_info_widget.dart';
 import 'package:weather_news_app/provider/weather_news_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
+  static const String route = "/home";
   const HomeScreen({super.key});
 
   @override
@@ -22,19 +25,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     // Listener to handle scrolling and collapsing behavior
     _scrollController.addListener(() {
-      if (_scrollController.offset > 200 && !_isCollapsed) {
+      if (_scrollController.offset > context.resources.screenHeight * 0.5 &&
+          !_isCollapsed) {
         setState(() {
           _isCollapsed = true;
         });
-      } else if (_scrollController.offset <= 200 && _isCollapsed) {
+      } else if (_scrollController.offset <=
+              context.resources.screenHeight * 0.5 &&
+          _isCollapsed) {
         setState(() {
           _isCollapsed = false;
         });
       }
     });
     // Initial fetch of weather and news data
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => fetchWeatherAndNews(ref, lat: "13", lon: "80", units: "metric"));
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final locationState = ref.read(locationViewModelProvider);
+      fetchWeatherAndNews(ref,
+          lat: locationState.value!.latitude.toString(),
+          lon: locationState.value!.longitude.toString(),
+          units: "metric");
+    });
   }
 
   @override
@@ -59,7 +70,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               errorBuilder: (context, error, stackTrace) =>
                   const CircularProgressIndicator(),
             ))
-          else ...[
+          else  ...[
             SingleChildScrollView(
               controller: _scrollController,
               child: Column(
@@ -79,13 +90,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
               ),
             ),
-            AppBarWidget(isCollapsed: _isCollapsed),
+            if(weatherState.weatherData != null)
+              AppBarWidget(
+                isCollapsed: _isCollapsed,
+                weatherState: weatherState,
+              ),
           ]
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          fetchWeatherAndNews(ref, lat: "13", lon: "80", units: "metric");
+          final locationState = ref.read(locationViewModelProvider);
+      fetchWeatherAndNews(ref,
+          lat: locationState.value!.latitude.toString(),
+          lon: locationState.value!.longitude.toString(),
+          units: "metric");
         },
         child: const Icon(Icons.refresh),
       ),

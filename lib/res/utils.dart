@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:weather_news_app/model/data_model/weather/weather_data.dart';
 
 class AppUtils {
   static String capitalizeFirstLetter(String word) {
@@ -69,5 +71,24 @@ class AppUtils {
     }
   }
 
-  static String weatherUrl(String iconData)=> "https://openweathermap.org/img/wn/${iconData}@2x.png";
+  static List<WeatherInfo> getUniqueEntriesByDate(List<WeatherInfo> entries) {
+    final Map<DateTime, WeatherInfo> uniqueEntriesMap = {};
+
+    for (final entry in entries) {
+      final DateTime date = DateTime.parse(entry.dt_txt);
+      final dateKey = DateTime(date.year, date.month, date.day);
+      if (!uniqueEntriesMap.containsKey(dateKey)) {
+        uniqueEntriesMap[dateKey] = entry;
+      }
+    }
+
+    return uniqueEntriesMap.values.toList();
+  }
+
+  static String getDayAbbreviation(String date) {
+  return DateFormat('EEE').format(DateTime.parse(date));
+}
+
+  static String weatherUrl(String iconData) =>
+      "https://openweathermap.org/img/wn/${iconData}@2x.png";
 }

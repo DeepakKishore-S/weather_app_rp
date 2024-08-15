@@ -14,6 +14,15 @@ class WeatherNetworkImageWidget extends StatelessWidget {
     return Image.network(
       imageUrl,
       fit: BoxFit.cover,
+      loadingBuilder: (context, child, loadingProgress) {
+        return Center(
+          child: Icon(
+            Icons.cloud, 
+            color: Colors.white,
+            size: context.resources.dimension.iconLargeSize,
+          ),
+        );
+      } ,
       errorBuilder: (context, error, stackTrace) {
         return  Center(
           child: Icon(
