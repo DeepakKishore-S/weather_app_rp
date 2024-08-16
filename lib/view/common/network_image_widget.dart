@@ -16,7 +16,7 @@ class WeatherNetworkImageWidget extends StatelessWidget {
       fit: BoxFit.cover,
       loadingBuilder: (context, child, loadingProgress) {
         if (loadingProgress == null) {
-          return child; // Image is fully loaded
+          return child; 
         } else {
           return Center(
             child: Icon(

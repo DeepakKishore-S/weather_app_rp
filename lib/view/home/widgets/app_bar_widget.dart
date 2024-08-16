@@ -4,6 +4,7 @@ import 'package:weather_news_app/model/data_model/weather_state.dart';
 import 'package:weather_news_app/res/AppContextExtension.dart';
 import 'package:weather_news_app/res/utils.dart';
 import 'package:weather_news_app/view/common/network_image_widget.dart';
+import 'package:weather_news_app/view/settings/settings_screen.dart';
 
 class AppBarWidget extends StatelessWidget {
   final bool isCollapsed;
@@ -82,9 +83,15 @@ class AppBarWidget extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      Icon(Icons.settings,
-                          color:
-                              isCollapsed ? Colors.white : Colors.transparent),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(SettingsScreen.route);
+                        },
+                        icon: Icon(Icons.settings,
+                            color: isCollapsed
+                                ? Colors.white
+                                : Colors.transparent),
+                      ),
                     ],
                   ),
                 )

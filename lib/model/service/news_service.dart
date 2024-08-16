@@ -1,17 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:weather_news_app/model/service/base_service.dart';
+import 'package:weather_news_app/res/app_exceptions.dart';
 
-class NewsService {
-  final String apiKey = '6d8a6c88e3454e1a8f7df2f07ae19698';
-  final String apiUrl = 'https://newsapi.org/v2/top-headlines';
-  
-
-  Future<List<dynamic>> fetchNews(String category) async {
-    final response = await http.get(Uri.parse('$apiUrl?category=$category&apiKey=$apiKey&country=us'));
-    if (response.statusCode == 200) {
-      return json.decode(response.body)['articles'];
-    } else {
-      throw Exception('Failed to load news');
+class NewsService extends BaseService {
+  dynamic responseJson;
+  Future fetchNews(String category) async {
+    try {
+      final response = await http.get(Uri.parse('$newsapiUrl?category=$category&apiKey=$newsApiKey&country=us'));
+      responseJson = parseResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    } catch (e) {
+      throw FetchDataException('An unexpected error occurred: $e');
     }
+    return responseJson;
   }
 }

@@ -4,11 +4,16 @@ import 'package:weather_news_app/model/data_model/weather_state.dart';
 import 'package:weather_news_app/model/repository/weather_news_repository.dart';
 import 'package:weather_news_app/model/service/news_service.dart';
 import 'package:weather_news_app/model/service/weather_service.dart';
+import 'package:weather_news_app/view_model/collapse_viewmodel.dart';
 import 'package:weather_news_app/view_model/news_viewmodel.dart';
 import 'package:weather_news_app/view_model/weather_viewmodel.dart';
 
 final weatherServiceProvider = Provider((ref) => WeatherService());
 final newsServiceProvider = Provider((ref) => NewsService());
+final collapseViewModelProvider =
+    StateNotifierProvider<CollapseViewModel, bool>(
+  (ref) => CollapseViewModel(),
+);
 
 final weatherNewsRepositoryProvider = Provider((ref) {
   final weatherService = ref.watch(weatherServiceProvider);
@@ -31,5 +36,3 @@ final newsProvider = StateNotifierProvider<NewsViewModel, NewsState>(
 );
 
 final locationProvider = StateProvider<String>((ref) => 'Chennai');
-
-

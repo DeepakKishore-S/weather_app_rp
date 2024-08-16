@@ -40,24 +40,24 @@ class NewsBodyWidget extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: newsState.newsData!.length,
+            itemCount: newsState.newsData!.articles!.length,
             itemBuilder: (context, index) {
-              final article = newsState.newsData![index];
+              final article = newsState.newsData!.articles![index];
               return Card(
                 elevation: 5,
                 child: ListTile(
-                  title: Text(article['title'],
+                  title: Text(article.title??"",
                       style: GoogleFonts.roboto(
                         fontSize: context.resources.dimension.mediumText,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       )),
-                  subtitle: Text(article['description'] ?? '',
+                  subtitle: Text(article.description ?? '',
                       style: GoogleFonts.roboto(
                         fontSize: context.resources.dimension.smallText,
                         color: Colors.black,
                       )),
-                  onTap: () => _launchURL(article['url']),
+                  onTap: () => _launchURL(article.url??""),
                 ),
               );
             },

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_news_app/provider/location_provider.dart';
+import 'package:weather_news_app/provider/weather_news_provider.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   static const String route = '/settings';
@@ -34,7 +36,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Settings')),
+      appBar: AppBar(title: const Text('Settings')),
       body: Column(
         children: [
           SwitchListTile(
@@ -42,6 +44,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 'Temperature Unit: ${isCelsius ? "Celsius" : "Fahrenheit"}'),
             value: isCelsius,
             onChanged: (value) {
+              onUnitChanged(value? "metric": "imperial");
               setState(() {
                 isCelsius = value;
                 _saveSettings();
@@ -53,4 +56,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       ),
     );
   }
+
+  void onUnitChanged(String newUnit) {
+    ref.read(collapseViewModelProvider.notifier).toggleCollapse(false);
+  final locationState = ref.read(locationViewModelProvider);
+  final weatherViewModel = ref.read(weatherProvider.notifier);
+
+  if (locationState.value != null) {
+    weatherViewModel.updateUnits(
+      newUnits: newUnit,
+      lat: locationState.value!.latitude.toString(),
+      lon: locationState.value!.longitude.toString(),
+    );
+  }
+}
+
 }

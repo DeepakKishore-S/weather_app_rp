@@ -15,29 +15,19 @@ class HomeScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
-
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-  bool _isCollapsed = false;
 
   @override
   void initState() {
     super.initState();
     // Listener to handle scrolling and collapsing behavior
     _scrollController.addListener(() {
-      if (_scrollController.offset > context.resources.screenHeight * 0.5 &&
-          !_isCollapsed) {
-        setState(() {
-          _isCollapsed = true;
-        });
-      } else if (_scrollController.offset <=
-              context.resources.screenHeight * 0.5 &&
-          _isCollapsed) {
-        setState(() {
-          _isCollapsed = false;
-        });
-      }
+      final isCollapsed = _scrollController.offset >
+          context.resources.screenHeight * 0.5;
+      ref.read(collapseViewModelProvider.notifier).toggleCollapse(isCollapsed);
     });
+
     // Initial fetch of weather and news data
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final locationState = ref.read(locationViewModelProvider);
@@ -58,6 +48,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final weatherState = ref.watch(weatherProvider);
     final newsState = ref.watch(newsProvider);
+    final isCollapsed = ref.watch(collapseViewModelProvider);
 
     return Scaffold(
       body: Stack(
@@ -70,12 +61,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               errorBuilder: (context, error, stackTrace) =>
                   const CircularProgressIndicator(),
             ))
-          else  ...[
+          else ...[
             SingleChildScrollView(
               controller: _scrollController,
               child: Column(
                 children: [
-                  // Display loading spinner, error message, or weather info
                   if (weatherState.isLoading)
                     const SizedBox.shrink()
                   else if (weatherState.errorMessage != null)
@@ -84,15 +74,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       newsState.newsData != null)
                     WeatherInfoWidget(
                       weatherState: weatherState,
-                      isCollapsed: _isCollapsed,
+                      isCollapsed: isCollapsed,
                     ),
                   NewsBodyWidget(newsState: newsState),
                 ],
               ),
             ),
-            if(weatherState.weatherData != null)
+            if (weatherState.weatherData != null)
               AppBarWidget(
-                isCollapsed: _isCollapsed,
+                isCollapsed: isCollapsed,
                 weatherState: weatherState,
               ),
           ]
@@ -101,10 +91,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final locationState = ref.read(locationViewModelProvider);
-      fetchWeatherAndNews(ref,
-          lat: locationState.value!.latitude.toString(),
-          lon: locationState.value!.longitude.toString(),
-          units: "metric");
+          fetchWeatherAndNews(ref,
+              lat: locationState.value!.latitude.toString(),
+              lon: locationState.value!.longitude.toString(),
+              units: "metric");
         },
         child: const Icon(Icons.refresh),
       ),
@@ -123,13 +113,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Future<void> fetchWeatherAndNews(WidgetRef ref,
       {required String lat, required String lon, required String units}) async {
-    setState(() {
-      _isCollapsed = false;
-    });
+    ref.read(collapseViewModelProvider.notifier).toggleCollapse(false);
     try {
       // Fetch weather data
       final weatherViewModel = ref.read(weatherProvider.notifier);
-      await weatherViewModel.fetchWeather(lat: lat, lon: lon, units: units);
+      await weatherViewModel.fetchWeather(lat: lat, lon: lon);
 
       // Retrieve weather condition for news
       final weatherCondition = weatherViewModel.getWeatherCondition();

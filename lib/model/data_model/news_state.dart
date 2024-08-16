@@ -1,6 +1,8 @@
+import 'package:weather_news_app/model/data_model/news/news_model.dart';
+
 class NewsState {
   final bool isLoading;
-  final List<dynamic>? newsData;
+  final NewsResponse? newsData;
   final String? errorMessage;
 
   NewsState({
@@ -15,7 +17,7 @@ class NewsState {
 
   NewsState copyWith({
     bool? isLoading,
-    List<dynamic>? newsData,
+    NewsResponse? newsData,
     String? errorMessage,
   }) {
     return NewsState(
