@@ -23,7 +23,7 @@ class AppBarWidget extends StatelessWidget {
       color: isCollapsed
           ? const Color.fromARGB(255, 39, 78, 98)
           : Colors.transparent,
-      height: context.resources.screenHeight * 0.12,
+      height: context.resources.screenHeight * 0.13,
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
       ),
@@ -37,38 +37,49 @@ class AppBarWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            weatherData.weather[0].main,
-                            style: GoogleFonts.roboto(
-                              fontSize: context.resources.dimension.mediumText,
-                              color: Colors.white,
-                            ),
-                          ),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(weatherState.weatherData!.city.name ,
-                                  style: GoogleFonts.roboto(
-                                    fontSize:
-                                        context.resources.dimension.mediumText,
-                                    color: Colors.white,
-                                  )),
+                              Text(
+                                weatherData.weather[0].main,
+                                style: GoogleFonts.roboto(
+                                  fontSize:
+                                      context.resources.dimension.mediumText,
+                                  color: Colors.white,
+                                ),
+                              ),
                               Text("  ${weatherData.main.temp.ceil()}°",
                                   style: GoogleFonts.roboto(
                                     fontSize:
                                         context.resources.dimension.mediumText,
                                     color: Colors.white,
-                                  ))
+                                  )),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: FittedBox(
+                                  child: WeatherNetworkImageWidget(
+                                    imageUrl: AppUtils.weatherUrl(
+                                        weatherData.weather[0].icon),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2.0),
+                            child: Text(weatherState.weatherData!.city.name,
+                                style: GoogleFonts.roboto(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                      context.resources.dimension.mediumText,
+                                  color: Colors.white,
+                                )),
+                          ),
                         ],
-                      ),
-                      SizedBox(
-                        height: 80,
-                        width: 80,
-                        child: WeatherNetworkImageWidget(
-                          imageUrl:
-                              AppUtils.weatherUrl(weatherData.weather[0].icon),
-                        ),
                       ),
                       const Spacer(),
                       Icon(Icons.settings,

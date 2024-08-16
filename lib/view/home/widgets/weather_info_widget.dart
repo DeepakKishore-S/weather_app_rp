@@ -24,8 +24,8 @@ class WeatherInfoWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         gradient: AppUtils.getWeatherGradient(
-          weatherDescription: weatherData.weather[0].main,
-          weatherMain: weatherData.weather[0].description,
+          weatherDescription: weatherData.weather[0].description,
+          weatherMain: weatherData.weather[0].main,
         ),
       ),
       child: Center(
