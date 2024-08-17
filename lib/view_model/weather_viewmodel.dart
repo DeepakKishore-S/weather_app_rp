@@ -17,7 +17,7 @@ class WeatherViewModel extends StateNotifier<WeatherState> {
       final WeatherData weatherData = await _repository.getWeatherData(
         lat: lat,
         lon: lon,
-        units: units, // Use the units from the state
+        units: units, 
       );
       state = state.copyWith(weatherData: weatherData, isLoading: false);
     } catch (e) {
@@ -37,6 +37,6 @@ class WeatherViewModel extends StateNotifier<WeatherState> {
     await fetchWeather(
         lat: lat,
         lon: lon,
-        units: units); // Automatically fetch weather with the new unit
+        units: units); 
   }
 }

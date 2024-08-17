@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_news_app/provider/location_provider.dart';
 import 'package:weather_news_app/provider/settings_provider.dart';
-import 'package:weather_news_app/provider/weather_news_provider.dart';
 import 'package:weather_news_app/res/AppContextExtension.dart';
 import 'package:weather_news_app/view/home/home_screen.dart';
 
