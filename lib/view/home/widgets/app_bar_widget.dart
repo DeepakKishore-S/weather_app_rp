@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:weather_news_app/model/data_model/weather_state.dart';
+import 'package:weather_news_app/model/state_model/weather_state.dart';
 import 'package:weather_news_app/res/AppContextExtension.dart';
 import 'package:weather_news_app/res/utils.dart';
 import 'package:weather_news_app/view/common/network_image_widget.dart';
@@ -20,10 +20,13 @@ class AppBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final weatherData = weatherState.weatherData!.list[0];
     return AnimatedContainer(
+      decoration: BoxDecoration(
+        gradient:isCollapsed? AppUtils.getWeatherGradient(
+          weatherDescription: weatherData.weather[0].description,
+          weatherMain: weatherData.weather[0].main,
+        ): null,
+      ),
       duration: const Duration(milliseconds: 300),
-      color: isCollapsed
-          ? const Color.fromARGB(255, 39, 78, 98)
-          : Colors.transparent,
       height: context.resources.screenHeight * 0.13,
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,

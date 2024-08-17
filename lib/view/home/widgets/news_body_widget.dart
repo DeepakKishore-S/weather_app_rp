@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:weather_news_app/model/data_model/news_state.dart';
+import 'package:weather_news_app/model/state_model/news_state.dart';
 import 'package:weather_news_app/res/AppContextExtension.dart';
 
 class NewsBodyWidget extends StatelessWidget {

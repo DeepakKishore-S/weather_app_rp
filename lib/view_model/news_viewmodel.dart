@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather_news_app/model/repository/weather_news_repository.dart';
-import 'package:weather_news_app/model/data_model/news_state.dart';
+import 'package:weather_news_app/model/state_model/news_state.dart';
 
 class NewsViewModel extends StateNotifier<NewsState> {
   final WeatherNewsRepository _repository;

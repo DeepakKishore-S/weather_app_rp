@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_news_app/model/data_model/weather/weather_data.dart';
-import 'package:weather_news_app/model/data_model/weather_state.dart';
+import 'package:weather_news_app/model/state_model/weather_state.dart';
 import 'package:weather_news_app/res/AppContextExtension.dart';
 import 'package:weather_news_app/res/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
