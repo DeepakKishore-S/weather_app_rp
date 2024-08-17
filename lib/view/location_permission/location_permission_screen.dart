@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_news_app/provider/location_provider.dart';
+import 'package:weather_news_app/provider/settings_provider.dart';
+import 'package:weather_news_app/provider/weather_news_provider.dart';
 import 'package:weather_news_app/res/AppContextExtension.dart';
 import 'package:weather_news_app/view/home/home_screen.dart';
 
@@ -16,6 +18,16 @@ class LocationPermissionScreen extends ConsumerStatefulWidget {
 
 class _LocationPermissionScreenState
     extends ConsumerState<LocationPermissionScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final units = ref.read(settingsViewModelProvider.notifier);
+      units.loadUnit();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final locationState = ref.watch(locationViewModelProvider);

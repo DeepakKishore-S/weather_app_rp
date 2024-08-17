@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_news_app/provider/location_provider.dart';
+import 'package:weather_news_app/provider/settings_provider.dart';
 import 'package:weather_news_app/provider/weather_news_provider.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -18,19 +18,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    _loadSettings();
-  }
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final unit = ref.watch(settingsViewModelProvider);
 
-  void _loadSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isCelsius = prefs.getBool('isCelsius') ?? true;
+      setState(() {
+        isCelsius = unit == "metric";
+      });
     });
-  }
-
-  void _saveSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isCelsius', isCelsius);
   }
 
   @override
@@ -44,31 +38,30 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 'Temperature Unit: ${isCelsius ? "Celsius" : "Fahrenheit"}'),
             value: isCelsius,
             onChanged: (value) {
-              onUnitChanged(value? "metric": "imperial");
+              onUnitChanged(value ? "metric" : "imperial");
               setState(() {
                 isCelsius = value;
-                _saveSettings();
               });
             },
           ),
-          // Add more settings here
         ],
       ),
     );
   }
 
   void onUnitChanged(String newUnit) {
+    final settingsViewModel = ref.read(settingsViewModelProvider.notifier);
+    settingsViewModel.updateUnit(newUnit);
     ref.read(collapseViewModelProvider.notifier).toggleCollapse(false);
-  final locationState = ref.read(locationViewModelProvider);
-  final weatherViewModel = ref.read(weatherProvider.notifier);
+    final locationState = ref.read(locationViewModelProvider);
+    final weatherViewModel = ref.read(weatherProvider.notifier);
 
-  if (locationState.value != null) {
-    weatherViewModel.updateUnits(
-      newUnits: newUnit,
-      lat: locationState.value!.latitude.toString(),
-      lon: locationState.value!.longitude.toString(),
-    );
+    if (locationState.value != null) {
+      weatherViewModel.updateUnits(
+        units: newUnit,
+        lat: locationState.value!.latitude.toString(),
+        lon: locationState.value!.longitude.toString(),
+      );
+    }
   }
-}
-
 }

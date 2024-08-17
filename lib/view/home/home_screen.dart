@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_news_app/provider/location_provider.dart';
+import 'package:weather_news_app/provider/settings_provider.dart';
 import 'package:weather_news_app/res/AppContextExtension.dart';
 import 'package:weather_news_app/view/home/widgets/app_bar_widget.dart';
 import 'package:weather_news_app/view/home/widgets/news_body_widget.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
+
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
 
@@ -23,18 +25,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     // Listener to handle scrolling and collapsing behavior
     _scrollController.addListener(() {
-      final isCollapsed = _scrollController.offset >
-          context.resources.screenHeight * 0.5;
+      final isCollapsed =
+          _scrollController.offset > context.resources.screenHeight * 0.5;
       ref.read(collapseViewModelProvider.notifier).toggleCollapse(isCollapsed);
     });
 
     // Initial fetch of weather and news data
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final locationState = ref.read(locationViewModelProvider);
+
       fetchWeatherAndNews(ref,
           lat: locationState.value!.latitude.toString(),
-          lon: locationState.value!.longitude.toString(),
-          units: "metric");
+          lon: locationState.value!.longitude.toString());
     });
   }
 
@@ -93,8 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           final locationState = ref.read(locationViewModelProvider);
           fetchWeatherAndNews(ref,
               lat: locationState.value!.latitude.toString(),
-              lon: locationState.value!.longitude.toString(),
-              units: "metric");
+              lon: locationState.value!.longitude.toString(),);
         },
         child: const Icon(Icons.refresh),
       ),
@@ -111,13 +112,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Future<void> fetchWeatherAndNews(WidgetRef ref,
-      {required String lat, required String lon, required String units}) async {
-    ref.read(collapseViewModelProvider.notifier).toggleCollapse(false);
+  Future<void> fetchWeatherAndNews(
+    WidgetRef ref, {
+    required String lat,
+    required String lon,
+  }) async {
     try {
+      ref.read(collapseViewModelProvider.notifier).toggleCollapse(false);
+      final units = ref.read(settingsViewModelProvider);
       // Fetch weather data
       final weatherViewModel = ref.read(weatherProvider.notifier);
-      await weatherViewModel.fetchWeather(lat: lat, lon: lon);
+      await weatherViewModel.fetchWeather(lat: lat, lon: lon, units: units);
 
       // Retrieve weather condition for news
       final weatherCondition = weatherViewModel.getWeatherCondition();

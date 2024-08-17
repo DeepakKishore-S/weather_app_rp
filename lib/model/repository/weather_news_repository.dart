@@ -1,7 +1,7 @@
 import 'package:weather_news_app/model/data_model/news/news_model.dart';
 import 'package:weather_news_app/model/data_model/weather/weather_data.dart';
-import 'package:weather_news_app/model/service/news_service.dart';
-import 'package:weather_news_app/model/service/weather_service.dart';
+import 'package:weather_news_app/model/service/api_service/news_service.dart';
+import 'package:weather_news_app/model/service/api_service/weather_service.dart';
 
 class WeatherNewsRepository {
   final WeatherService _weatherService;
